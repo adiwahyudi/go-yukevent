@@ -2,13 +2,13 @@ package database
 
 import (
 	"yukevent/config"
-	"yukevent/etc"
+	"yukevent/helper"
 	"yukevent/model"
 )
 
 func RegisterUser(user model.User) (*model.User, error) {
 
-	hashedPassword, err := etc.HashingPassword(user.Password)
+	hashedPassword, err := helper.HashingPassword(user.Password)
 	user.Password = hashedPassword
 	if err != nil {
 		return &model.User{}, err
@@ -22,16 +22,43 @@ func RegisterUser(user model.User) (*model.User, error) {
 	return &user, nil
 }
 
-// func LoginUser(user mode.User) (*model.User, error) {
-
-// }
-
-func UpdateUser(id int, user model.User) (*model.User, error) {
+func LoginUser(user model.User) (*model.User, error) {
 
 	var users model.User
-	err := config.DB.Find(&users, id).Updates(&user).Error
+
+	err := config.DB.Where("email = ?", user.Email).First(&users).Error
+
 	if err != nil {
 		return &model.User{}, err
 	}
-	return &user, err
+
+	err = helper.CheckPasswordHash(user.Password, users.Password)
+
+	if err != nil {
+		return &model.User{}, err
+	}
+
+	return &users, nil
 }
+
+func GetUser() (*[]model.User, error) {
+
+	var users []model.User
+
+	err := config.DB.Find(&users).Error
+
+	if err != nil {
+		return &[]model.User{}, err
+	}
+	return &users, nil
+}
+
+// func UpdateUser(id int, user model.User) (*model.User, error) {
+
+// 	var users model.User
+// 	err := config.DB.Find(&users, id).Updates(&user).Error
+// 	if err != nil {
+// 		return &model.User{}, err
+// 	}
+// 	return &user, err
+// }

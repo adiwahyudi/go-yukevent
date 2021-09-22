@@ -1,3 +1,3 @@
 package constants
 
-const SECRECT_JWT = "123456"
+const SECRECT_JWT = "LEGAL"

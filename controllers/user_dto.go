@@ -5,6 +5,7 @@ import (
 	"yukevent/model"
 )
 
+// Login Request and Response
 type RequestUserRegister struct {
 	Username     string `json:"username" form:"username"`
 	Email        string `json:"email" form:"email"`
@@ -55,12 +56,43 @@ func newResponse(mdlUsers model.User) ResponseUser {
 	}
 }
 
-// func newResponseArray(mdlUsers []model.User) []ResponseUser {
-// 	var resp []ResponseUser
+// Login Request
+type RequestUserLogin struct {
+	Email    string `json:"email" form:"email"`
+	Password string `json:"password" form:"password"`
+}
 
-// 	for _, value := range mdlUsers {
-// 		resp = append(resp, newResponse(value))
-// 	}
+func (req *RequestUserLogin) toModel() model.User {
+	return model.User{
+		Email:    req.Email,
+		Password: req.Password,
+	}
+}
 
-// 	return resp
+// type ResponeLoginUser struct {
+// 	ID       int    `json:"id" form:"id"`
+// 	Username string `json:"username" form:"username"`
+// 	Email    string `json:"email" form:"email"`
+// 	Name     string `json:"name" form:"name"`
+// 	Token    string `json:"jwt" form:"jwt"`
 // }
+
+// func newResponseLoginUser(mdlUsers model.User) ResponeLoginUser {
+// 	return ResponeLoginUser{
+// 		ID:       mdlUsers.ID,
+// 		Username: mdlUsers.Username,
+// 		Email:    mdlUsers.Email,
+// 		Name:     mdlUsers.Name,
+// 		Token:    mdlUsers.Token,
+// 	}
+// }
+
+func newResponseArray(mdlUsers []model.User) []ResponseUser {
+	var resp []ResponseUser
+
+	for _, value := range mdlUsers {
+		resp = append(resp, newResponse(value))
+	}
+
+	return resp
+}
