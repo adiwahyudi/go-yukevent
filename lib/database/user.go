@@ -22,17 +22,17 @@ func RegisterUser(user model.User) (*model.User, error) {
 	return &user, nil
 }
 
-func LoginUser(user model.User) (*model.User, error) {
+func LoginUser(email, password string) (*model.User, error) {
 
 	var users model.User
 
-	err := config.DB.Where("email = ?", user.Email).First(&users).Error
+	err := config.DB.Where("email = ?", email).First(&users).Error
 
 	if err != nil {
 		return &model.User{}, err
 	}
 
-	err = helper.CheckPasswordHash(user.Password, users.Password)
+	err = helper.CheckPasswordHash(password, users.Password)
 
 	if err != nil {
 		return &model.User{}, err

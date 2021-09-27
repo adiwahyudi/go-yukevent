@@ -16,7 +16,7 @@ func New() *echo.Echo {
 	e.POST("/register", controllers.RegisterUserController)
 	e.POST("/login", controllers.LoginUserController)
 
-	// Implement Auth using JWT
+	// Implement AUTH using JWT
 	jwt := middleware.JWT([]byte(constants.SECRECT_JWT))
 	e.GET("/user", controllers.GetUser, jwt)
 

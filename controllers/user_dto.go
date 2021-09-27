@@ -62,13 +62,6 @@ type RequestUserLogin struct {
 	Password string `json:"password" form:"password"`
 }
 
-func (req *RequestUserLogin) toModel() model.User {
-	return model.User{
-		Email:    req.Email,
-		Password: req.Password,
-	}
-}
-
 // type ResponeLoginUser struct {
 // 	ID       int    `json:"id" form:"id"`
 // 	Username string `json:"username" form:"username"`

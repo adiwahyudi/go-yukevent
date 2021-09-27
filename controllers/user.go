@@ -28,7 +28,7 @@ func LoginUserController(c echo.Context) error {
 
 	c.Bind(&userReq)
 
-	result, err := database.LoginUser(userReq.toModel())
+	result, err := database.LoginUser(userReq.Email,userReq.Password)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
