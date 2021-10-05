@@ -23,3 +23,8 @@ func (req *Users) ToDomain() *users.Domain {
 		Photo:        req.Photo,
 	}
 }
+
+type UserLogin struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}

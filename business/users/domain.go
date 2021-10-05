@@ -1,12 +1,11 @@
 package users
 
 import (
-	"context"
 	"time"
 )
 
 type Domain struct {
-	Id           int
+	ID           int
 	Username     string
 	Email        string
 	Password     string
@@ -14,16 +13,17 @@ type Domain struct {
 	Dob          string
 	Phone_Number string
 	Photo        string
+	Token        string
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }
 
 type Service interface {
-	Register(ctx context.Context, domain Domain) (Domain, error)
-	// Login(ctx context.Context, domain Domain) (Domain, error)
+	Register(domain *Domain) (Domain, error)
+	Login(email, password string) (Domain, error)
 }
 
 type Repository interface {
-	Register(ctx context.Context, domain Domain) (Domain, error)
-	// Login(ctx context.Context, email, password string) (Domain, error)
+	Register(domain *Domain) (Domain, error)
+	Login(email, password string) (Domain, error)
 }

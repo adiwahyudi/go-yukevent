@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"yukevent/business/users"
 	"yukevent/controllers"
+	"yukevent/controllers/users/request"
+	"yukevent/controllers/users/response"
 
 	"github.com/labstack/echo/v4"
 )
@@ -20,17 +22,34 @@ func NewControllerUser(serv users.Service) *UserController {
 
 func (ctrl *UserController) Register(c echo.Context) error {
 
-	ctx := c.Request().Context()
-	registerReq := users.Domain{}
+	// ctx := c.Request().Context()
+	registerReq := request.Users{}
+
 	if err := c.Bind(&registerReq); err != nil {
 		return controllers.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	result, err := ctrl.userService.Register(ctx, registerReq.ToDomain())
+	result, err := ctrl.userService.Register(registerReq.ToDomain())
+
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	return controllers.NewSuccessResponse(c, result)
+	return controllers.NewSuccessResponse(c, response.FromDomainRegister(result))
 
+}
+
+func (ctrl *UserController) Login(c echo.Context) error {
+
+	loginReq := request.UserLogin{}
+
+	if err := c.Bind(&loginReq); err != nil {
+		return controllers.NewErrorResponse(c, http.StatusBadRequest, err)
+	}
+	result, err := ctrl.userService.Login(loginReq.Email, loginReq.Password)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, response.FromDomainLogin(result))
 }
