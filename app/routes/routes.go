@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"yukevent/controllers/events"
 	"yukevent/controllers/organizers"
 	"yukevent/controllers/users"
 
@@ -12,6 +13,7 @@ type ControllerList struct {
 	JWTMiddleware       middleware.JWTConfig
 	UserController      users.UserController
 	OrganizerController organizers.OrganizerController
+	EventController     events.EventController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -23,4 +25,5 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	organizers := e.Group("organizers")
 	organizers.POST("/register", cl.OrganizerController.Register)
 	organizers.POST("/login", cl.OrganizerController.Login)
+	organizers.POST("/create-event", cl.EventController.Create, middleware.JWTWithConfig(cl.JWTMiddleware))
 }

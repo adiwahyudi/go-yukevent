@@ -13,6 +13,10 @@ import (
 	_organizerController "yukevent/controllers/organizers"
 	_organizerRepo "yukevent/drivers/databases/organizers"
 
+	_eventService "yukevent/business/events"
+	_eventController "yukevent/controllers/events"
+	_eventsRepo "yukevent/drivers/databases/events"
+
 	_dbDriver "yukevent/drivers/mysql"
 
 	_driverFactory "yukevent/drivers"
@@ -40,6 +44,7 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(
 		&_userRepo.Users{},
 		&_organizerRepo.Organizers{},
+		&_eventsRepo.Events{},
 	)
 }
 
@@ -69,10 +74,15 @@ func main() {
 	organizerService := _organizerService.NewServiceOrganizer(organizerRepo, 10, &configJWT)
 	organizerCtrl := _organizerController.NewControllerOrganizer(organizerService)
 
+	eventRepo := _driverFactory.NewEventRepository(db)
+	eventService := _eventService.NewServiceEvent(eventRepo)
+	eventCtrl := _eventController.NewControllerEvent(eventService)
+
 	routesInit := _routes.ControllerList{
 		JWTMiddleware:       configJWT.Init(),
 		UserController:      *userCtrl,
 		OrganizerController: *organizerCtrl,
+		EventController:     *eventCtrl,
 	}
 
 	routesInit.RouteRegister(e)

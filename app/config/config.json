@@ -12,5 +12,9 @@
 		"user": "root",
 		"pass": "wahyudi",
 		"name": "yukevent"
+	},
+	"jwt": {
+		"secret": "nobijustyle",
+		"expired": 1
 	}
 }
