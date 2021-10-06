@@ -19,15 +19,7 @@ func NewMysqlUserRepository(conn *gorm.DB) users.Repository {
 
 func (rep *MysqlUserRepository) Register(domain *users.Domain) (users.Domain, error) {
 
-	var findDuplicate Users
-
 	user := fromDomain(*domain)
-
-	err := rep.Conn.First(&findDuplicate, "email = ?", user.Email).Error
-
-	if err != nil {
-		return users.Domain{}, nil
-	}
 
 	result := rep.Conn.Create(&user)
 	if result.Error != nil {
