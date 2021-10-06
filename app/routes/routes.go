@@ -1,6 +1,10 @@
 package routes
 
 import (
+	"errors"
+	"net/http"
+	middlewareApp "yukevent/app/middleware"
+	controller "yukevent/controllers"
 	"yukevent/controllers/events"
 	"yukevent/controllers/organizers"
 	"yukevent/controllers/users"
@@ -25,5 +29,33 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	organizers := e.Group("organizers")
 	organizers.POST("/register", cl.OrganizerController.Register)
 	organizers.POST("/login", cl.OrganizerController.Login)
-	organizers.POST("/create-event", cl.EventController.Create, middleware.JWTWithConfig(cl.JWTMiddleware))
+	organizers.POST("/create-event", cl.EventController.Create, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationOrganizer())
+}
+
+func RoleValidationUser() echo.MiddlewareFunc {
+	return func(hf echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			claims := middlewareApp.GetUser(c)
+
+			if claims.Role == "user" {
+				return hf(c)
+			} else {
+				return controller.NewErrorResponse(c, http.StatusForbidden, errors.New("unathorized"))
+			}
+		}
+	}
+}
+
+func RoleValidationOrganizer() echo.MiddlewareFunc {
+	return func(hf echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			claims := middlewareApp.GetUser(c)
+
+			if claims.Role == "organizer" {
+				return hf(c)
+			} else {
+				return controller.NewErrorResponse(c, http.StatusForbidden, errors.New("unathorized"))
+			}
+		}
+	}
 }

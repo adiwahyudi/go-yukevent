@@ -57,7 +57,7 @@ func (serv *serviceOrganizer) Login(email, password string) (Domain, error) {
 		return Domain{}, business.ErrEmailorPass
 	}
 
-	result.Token = serv.jwtAuth.GenerateToken(result.ID)
+	result.Token = serv.jwtAuth.GenerateToken(result.ID, "organizer")
 
 	return result, nil
 }
