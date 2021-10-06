@@ -62,3 +62,12 @@ func fromDomain(domain events.Domain) Events {
 		UpdatedAt:        domain.UpdatedAt,
 	}
 }
+
+func toDomainList(data []Events) []events.Domain {
+	result := []events.Domain{}
+
+	for _, ev := range data {
+		result = append(result, toDomain(ev))
+	}
+	return result
+}

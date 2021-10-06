@@ -20,14 +20,14 @@ type Domain struct {
 }
 
 type Service interface {
-	// AllEvent() ([]Domain, error)
+	AllEvent() ([]Domain, error)
 	Create(orgID int, domain *Domain) (Domain, error)
 	// Update(domain *Domain) (Domain, error)
 	// Delete(id int) error
 }
 
 type Repository interface {
-	// AllEvent() ([]Domain, error)
+	AllEvent() ([]Domain, error)
 	Create(orgID int, domain *Domain) (Domain, error)
 	// Update(domain *Domain) (Domain, error)
 	// Delete(id int) error

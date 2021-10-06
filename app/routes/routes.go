@@ -22,6 +22,8 @@ type ControllerList struct {
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 
+	e.GET("/events", cl.EventController.AllEvent)
+
 	users := e.Group("users")
 	users.POST("/register", cl.UserController.Register)
 	users.POST("/login", cl.UserController.Login)
@@ -30,6 +32,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	organizers.POST("/register", cl.OrganizerController.Register)
 	organizers.POST("/login", cl.OrganizerController.Login)
 	organizers.POST("/create-event", cl.EventController.Create, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationOrganizer())
+
 }
 
 func RoleValidationUser() echo.MiddlewareFunc {

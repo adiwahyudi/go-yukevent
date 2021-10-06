@@ -40,3 +40,15 @@ func (ctrl *EventController) Create(c echo.Context) error {
 	return controllers.NewSuccessResponse(c, response.FromDomainCreate(result))
 
 }
+
+func (ctrl *EventController) AllEvent(c echo.Context) error {
+
+	result, err := ctrl.eventService.AllEvent()
+
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	return controllers.NewSuccessResponse(c, response.FromEventListDomain(result))
+
+}

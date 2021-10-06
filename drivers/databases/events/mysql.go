@@ -1,7 +1,6 @@
 package events
 
 import (
-	"fmt"
 	"yukevent/business/events"
 
 	"gorm.io/gorm"
@@ -26,10 +25,23 @@ func (rep *MysqlEventRepository) Create(orgID int, domain *events.Domain) (event
 	result := rep.Conn.Create(&ev)
 
 	if result.Error != nil {
-		fmt.Println("Error mysql.go")
 		return events.Domain{}, result.Error
 	}
 
 	return toDomain(ev), nil
+
+}
+
+func (rep *MysqlEventRepository) AllEvent() ([]events.Domain, error) {
+
+	var event []Events
+
+	result := rep.Conn.Find(&event)
+
+	if result.Error != nil {
+		return []events.Domain{}, result.Error
+	}
+
+	return toDomainList(event), nil
 
 }

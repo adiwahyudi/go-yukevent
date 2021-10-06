@@ -12,16 +12,16 @@ func NewServiceEvent(repoEvent Repository) Service {
 	}
 }
 
-// func (serv *serviceEvent) AllEvent() ([]Domain, error) {
+func (serv *serviceEvent) AllEvent() ([]Domain, error) {
 
-// 	result, err := serv.eventRepository.AllEvent()
+	result, err := serv.eventRepository.AllEvent()
 
-// 	if err != nil {
-// 		return []Domain{}, err
-// 	}
+	if err != nil {
+		return []Domain{}, err
+	}
 
-// 	return result, nil
-// }
+	return result, nil
+}
 
 func (serv *serviceEvent) Create(orgID int, domain *Domain) (Domain, error) {
 
