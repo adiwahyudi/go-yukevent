@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"errors"
 	"net/http"
 	middlewareApp "yukevent/app/middleware"
+	"yukevent/business"
 	controller "yukevent/controllers"
 	"yukevent/controllers/events"
 	"yukevent/controllers/organizers"
@@ -22,16 +22,25 @@ type ControllerList struct {
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 
+	// Public
 	e.GET("/events", cl.EventController.AllEvent)
+	e.GET("/event/:id", cl.EventController.EventByID)
+	e.GET("/:organizerID/events", cl.EventController.EventByIdOrganizer)
 
+	// Users
 	users := e.Group("users")
 	users.POST("/register", cl.UserController.Register)
 	users.POST("/login", cl.UserController.Login)
 
+	// Organizers
 	organizers := e.Group("organizers")
 	organizers.POST("/register", cl.OrganizerController.Register)
 	organizers.POST("/login", cl.OrganizerController.Login)
+
 	organizers.POST("/create-event", cl.EventController.Create, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationOrganizer())
+	organizers.PUT("/update-event/:id", cl.EventController.Update, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationOrganizer())
+	organizers.DELETE("/delete-event/:id", cl.EventController.Delete, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationOrganizer())
+	organizers.GET("/my-events", cl.EventController.MyEventByOrganizer, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationOrganizer())
 
 }
 
@@ -43,7 +52,7 @@ func RoleValidationUser() echo.MiddlewareFunc {
 			if claims.Role == "user" {
 				return hf(c)
 			} else {
-				return controller.NewErrorResponse(c, http.StatusForbidden, errors.New("unathorized"))
+				return controller.NewErrorResponse(c, http.StatusForbidden, business.ErrUnathorized)
 			}
 		}
 	}
@@ -57,7 +66,7 @@ func RoleValidationOrganizer() echo.MiddlewareFunc {
 			if claims.Role == "organizer" {
 				return hf(c)
 			} else {
-				return controller.NewErrorResponse(c, http.StatusForbidden, errors.New("unathorized"))
+				return controller.NewErrorResponse(c, http.StatusForbidden, business.ErrUnathorized)
 			}
 		}
 	}

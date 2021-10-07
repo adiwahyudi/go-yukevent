@@ -41,7 +41,7 @@ func FromDomainCreate(domain events.Domain) CreateEventResponse {
 	}
 }
 
-type AllEventResponse struct {
+type EventResponse struct {
 	ID               int       `json:"id:"`
 	Name             string    `json:"name"`
 	Description      string    `json:"desc"`
@@ -57,8 +57,8 @@ type AllEventResponse struct {
 	UpdatedAt        time.Time `json:"updated_at"`
 }
 
-func FromDomainAllEvent(domain events.Domain) AllEventResponse {
-	return AllEventResponse{
+func FromDomainAllEvent(domain events.Domain) EventResponse {
+	return EventResponse{
 		ID:               domain.ID,
 		Name:             domain.Name,
 		Description:      domain.Description,
@@ -74,8 +74,28 @@ func FromDomainAllEvent(domain events.Domain) AllEventResponse {
 		UpdatedAt:        domain.UpdatedAt,
 	}
 }
-func FromEventListDomain(domain []events.Domain) []AllEventResponse {
-	var response []AllEventResponse
+
+func FromDomainUpdateEvent(domain events.Domain) CreateEventResponse {
+	return CreateEventResponse{
+		Message:          "Update Event Success",
+		ID:               domain.ID,
+		Name:             domain.Name,
+		Description:      domain.Description,
+		Syarat_Ketentuan: domain.Syarat_Ketentuan,
+		Location:         domain.Location,
+		Event_Date:       domain.Event_Date,
+		Event_Time:       domain.Event_Time,
+		Close_Register:   domain.Close_Register,
+		Capacity:         domain.Capacity,
+		Poster:           domain.Poster,
+		Price:            domain.Price,
+		CreatedAt:        domain.CreatedAt,
+		UpdatedAt:        domain.UpdatedAt,
+	}
+}
+
+func FromEventListDomain(domain []events.Domain) []EventResponse {
+	var response []EventResponse
 	for _, value := range domain {
 		response = append(response, FromDomainAllEvent(value))
 	}

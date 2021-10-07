@@ -22,13 +22,19 @@ type Domain struct {
 type Service interface {
 	AllEvent() ([]Domain, error)
 	Create(orgID int, domain *Domain) (Domain, error)
-	// Update(domain *Domain) (Domain, error)
-	// Delete(id int) error
+	Update(orgID int, evID int, domain *Domain) (Domain, error)
+	Delete(orgID, id int) (string, error)
+	MyEventByOrganizer(orgID int) ([]Domain, error)
+	EventByID(id int) (Domain, error)
+	EventByIdOrganizer(orgzID int) ([]Domain, error)
 }
 
 type Repository interface {
 	AllEvent() ([]Domain, error)
 	Create(orgID int, domain *Domain) (Domain, error)
-	// Update(domain *Domain) (Domain, error)
-	// Delete(id int) error
+	Update(orgID int, evID int, domain *Domain) (Domain, error)
+	Delete(orgID, id int) (string, error)
+	MyEventByOrganizer(orgID int) ([]Domain, error)
+	EventByID(id int) (Domain, error)
+	EventByIdOrganizer(orgzID int) ([]Domain, error)
 }

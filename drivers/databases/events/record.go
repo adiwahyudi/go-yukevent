@@ -63,6 +63,24 @@ func fromDomain(domain events.Domain) Events {
 	}
 }
 
+func toDomainUpdate(ev Events) events.Domain {
+	return events.Domain{
+		ID:               ev.ID,
+		OrganizerID:      ev.OrganizerID,
+		Name:             ev.Name,
+		Description:      ev.Description,
+		Syarat_Ketentuan: ev.Syarat_Ketentuan,
+		Location:         ev.Location,
+		Event_Date:       ev.Event_Date,
+		Event_Time:       ev.Event_Time,
+		Close_Register:   ev.Close_Register,
+		Capacity:         ev.Capacity,
+		Poster:           ev.Poster,
+		Price:            ev.Price,
+		CreatedAt:        ev.CreatedAt,
+		UpdatedAt:        ev.UpdatedAt,
+	}
+}
 func toDomainList(data []Events) []events.Domain {
 	result := []events.Domain{}
 

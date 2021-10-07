@@ -1,6 +1,9 @@
 package events
 
-import "fmt"
+import (
+	"fmt"
+	"yukevent/business"
+)
 
 type serviceEvent struct {
 	eventRepository Repository
@@ -35,24 +38,57 @@ func (serv *serviceEvent) Create(orgID int, domain *Domain) (Domain, error) {
 	return result, nil
 }
 
-// func (serv *serviceEvent) Update(domain *Domain) (Domain, error) {
+func (serv *serviceEvent) Update(orgID int, evID int, domain *Domain) (Domain, error) {
 
-// 	result, err := serv.eventRepository.Update(domain)
+	result, err := serv.eventRepository.Update(orgID, evID, domain)
 
-// 	if err != nil {
-// 		return Domain{}, err
-// 	}
+	if err != nil {
+		return Domain{}, err
+	}
 
-// 	return result, nil
-// }
+	return result, nil
+}
 
-// func (serv *serviceEvent) Delete(id int) error {
+func (serv *serviceEvent) Delete(orgID int, id int) (string, error) {
 
-// 	err := serv.eventRepository.Delete(id)
+	result, err := serv.eventRepository.Delete(orgID, id)
 
-// 	if err != nil {
-// 		return err
-// 	}
+	if err != nil {
+		return "", business.ErrNotFound
+	}
 
-// 	return nil
-// }
+	return result, nil
+}
+
+func (serv *serviceEvent) MyEventByOrganizer(orgID int) ([]Domain, error) {
+
+	result, err := serv.eventRepository.MyEventByOrganizer(orgID)
+
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return result, nil
+}
+
+func (serv *serviceEvent) EventByID(id int) (Domain, error) {
+
+	result, err := serv.eventRepository.EventByID(id)
+
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return result, nil
+}
+func (serv *serviceEvent) EventByIdOrganizer(orgzID int) ([]Domain, error) {
+
+	result, err := serv.eventRepository.EventByIdOrganizer(orgzID)
+
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return result, nil
+
+}
