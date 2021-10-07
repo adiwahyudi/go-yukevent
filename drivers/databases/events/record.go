@@ -9,20 +9,20 @@ import (
 
 type Events struct {
 	gorm.Model
-	ID               int       `json:"id" gorm:"primary_key"`
-	OrganizerID      int       `json:"organizer_id"`
-	Name             string    `json:"name"`
-	Description      string    `json:"desc"`
-	Syarat_Ketentuan string    `json:"s&k"`
-	Location         string    `json:"loc"`
-	Event_Date       string    `json:"event_date"`
-	Event_Time       string    `json:"event_time"`
-	Close_Register   string    `json:"close_regist"`
-	Capacity         int       `json:"capacity"`
-	Poster           string    `json:"poster"`
-	Price            int       `json:"price"`
-	CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at" form:"updated_at"`
+	ID               int `gorm:"primary_key"`
+	OrganizerID      int
+	Name             string
+	Description      string
+	Syarat_Ketentuan string
+	Location         string
+	Event_Date       string
+	Event_Time       string
+	Close_Register   string
+	Capacity         int
+	Poster           string
+	Price            int
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
 }
 
 func toDomain(ev Events) events.Domain {
