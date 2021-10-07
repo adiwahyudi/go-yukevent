@@ -35,3 +35,4 @@ func NewTransRepository(conn *gorm.DB) transDomain.Repository {
 func NewAdminRepository(conn *gorm.DB) adminDomain.Repository {
 	return adminDB.NewMysqlAdminRepository(conn)
 }
+

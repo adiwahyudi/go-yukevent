@@ -7,6 +7,7 @@ import (
 	controller "yukevent/controllers"
 	"yukevent/controllers/admins"
 	"yukevent/controllers/events"
+	"yukevent/controllers/news"
 	"yukevent/controllers/organizers"
 	"yukevent/controllers/transactions"
 	"yukevent/controllers/users"
@@ -22,6 +23,7 @@ type ControllerList struct {
 	EventController     events.EventController
 	TransController     transactions.TransController
 	AdminController     admins.AdminController
+	NewsController      news.NewsController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -30,6 +32,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("/events", cl.EventController.AllEvent)
 	e.GET("/event/:id", cl.EventController.EventByID)
 	e.GET("/:organizerID/events", cl.EventController.EventByIdOrganizer)
+	e.GET("/news", cl.NewsController.GetNewsByCategory)
 
 	// Admins
 	admins := e.Group("admins")
