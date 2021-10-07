@@ -1,8 +1,6 @@
-package users
+package organizers
 
-import (
-	"time"
-)
+import "time"
 
 type Domain struct {
 	ID           int

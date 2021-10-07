@@ -2,10 +2,10 @@ package response
 
 import (
 	"time"
-	"yukevent/business/users"
+	"yukevent/business/organizers"
 )
 
-type UserRegisterResponse struct {
+type OrganizerRegisterRespone struct {
 	Message   string    `json:"message"`
 	ID        int       `json:"id:"`
 	Username  string    `json:"username"`
@@ -14,9 +14,9 @@ type UserRegisterResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func FromDomainRegister(domain users.Domain) UserRegisterResponse {
-	return UserRegisterResponse{
-		Message:   "Registration Success",
+func FromDomainRegister(domain organizers.Domain) OrganizerRegisterRespone {
+	return OrganizerRegisterRespone{
+		Message:   "Organizer Registration Success",
 		ID:        domain.ID,
 		Username:  domain.Username,
 		Email:     domain.Email,
@@ -25,14 +25,14 @@ func FromDomainRegister(domain users.Domain) UserRegisterResponse {
 	}
 }
 
-type UserLoginResponse struct {
+type OrganizerLoginResponse struct {
 	Message string `json:"message"`
 	Token   string `json:"token"`
 }
 
-func FromDomainLogin(domain users.Domain) UserLoginResponse {
-	return UserLoginResponse{
-		Message: "Login Success",
+func FromDomainLogin(domain organizers.Domain) OrganizerLoginResponse {
+	return OrganizerLoginResponse{
+		Message: "Organizer Login Success",
 		Token:   domain.Token,
 	}
 }

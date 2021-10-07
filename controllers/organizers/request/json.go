@@ -1,8 +1,10 @@
 package request
 
-import "yukevent/business/users"
+import (
+	"yukevent/business/organizers"
+)
 
-type Users struct {
+type Organizer struct {
 	Username     string `json:"username"`
 	Password     string `json:"password"`
 	Email        string `json:"email"`
@@ -12,8 +14,8 @@ type Users struct {
 	Photo        string `json:"photo"`
 }
 
-func (req *Users) ToDomain() *users.Domain {
-	return &users.Domain{
+func (req *Organizer) ToDomain() *organizers.Domain {
+	return &organizers.Domain{
 		Username:     req.Username,
 		Password:     req.Password,
 		Email:        req.Email,
@@ -24,7 +26,7 @@ func (req *Users) ToDomain() *users.Domain {
 	}
 }
 
-type UserLogin struct {
+type OrganzierLogin struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }

@@ -9,7 +9,7 @@ import (
 )
 
 type ConfigDB struct {
-	DB_Username string	
+	DB_Username string
 	DB_Password string
 	DB_Host     string
 	DB_Port     string
