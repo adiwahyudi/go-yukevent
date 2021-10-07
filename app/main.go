@@ -25,6 +25,9 @@ import (
 	_adminController "yukevent/controllers/admins"
 	_adminRepo "yukevent/drivers/databases/admins"
 
+	_newsController "yukevent/controllers/news"
+	_newsRepo "yukevent/drivers/databases/thirdparties/news"
+
 	_dbDriver "yukevent/drivers/mysql"
 
 	_driverFactory "yukevent/drivers"
@@ -96,6 +99,9 @@ func main() {
 	adminService := _adminService.NewServiceAdmin(adminRepo, 10, &configJWT)
 	adminCtrl := _adminController.NewControllerAdmin(adminService)
 
+	newsRepo := _newsRepo.NewNewsApi()
+	newsCtrl := _newsController.NewNewsController(newsRepo)
+
 	routesInit := _routes.ControllerList{
 		JWTMiddleware:       configJWT.Init(),
 		UserController:      *userCtrl,
@@ -103,6 +109,7 @@ func main() {
 		EventController:     *eventCtrl,
 		TransController:     *transCtrl,
 		AdminController:     *adminCtrl,
+		NewsController:      *newsCtrl,
 	}
 
 	routesInit.RouteRegister(e)
