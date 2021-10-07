@@ -33,10 +33,6 @@ func (serv *serviceUser) Register(domain *Domain) (Domain, error) {
 
 	result, err := serv.userRepository.Register(domain)
 
-	if result == (Domain{}) {
-		return Domain{}, business.ErrDuplicateData
-	}
-
 	if err != nil {
 		return Domain{}, business.ErrInternalServer
 	}

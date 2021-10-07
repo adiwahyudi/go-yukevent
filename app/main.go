@@ -17,6 +17,14 @@ import (
 	_eventController "yukevent/controllers/events"
 	_eventsRepo "yukevent/drivers/databases/events"
 
+	_transService "yukevent/business/transactions"
+	_transController "yukevent/controllers/transactions"
+	_transRepo "yukevent/drivers/databases/transactions"
+
+	_adminService "yukevent/business/admins"
+	_adminController "yukevent/controllers/admins"
+	_adminRepo "yukevent/drivers/databases/admins"
+
 	_dbDriver "yukevent/drivers/mysql"
 
 	_driverFactory "yukevent/drivers"
@@ -45,6 +53,8 @@ func dbMigrate(db *gorm.DB) {
 		&_userRepo.Users{},
 		&_organizerRepo.Organizers{},
 		&_eventsRepo.Events{},
+		&_transRepo.Transactions{},
+		&_adminRepo.Admins{},
 	)
 }
 
@@ -78,14 +88,25 @@ func main() {
 	eventService := _eventService.NewServiceEvent(eventRepo)
 	eventCtrl := _eventController.NewControllerEvent(eventService)
 
+	transRepo := _driverFactory.NewTransRepository(db)
+	transService := _transService.NewServiceTrans(transRepo)
+	transCtrl := _transController.NewControllerEvent(transService)
+
+	adminRepo := _driverFactory.NewAdminRepository(db)
+	adminService := _adminService.NewServiceAdmin(adminRepo, 10, &configJWT)
+	adminCtrl := _adminController.NewControllerAdmin(adminService)
+
 	routesInit := _routes.ControllerList{
 		JWTMiddleware:       configJWT.Init(),
 		UserController:      *userCtrl,
 		OrganizerController: *organizerCtrl,
 		EventController:     *eventCtrl,
+		TransController:     *transCtrl,
+		AdminController:     *adminCtrl,
 	}
 
 	routesInit.RouteRegister(e)
+	_middleware.Logger(e)
 
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }
