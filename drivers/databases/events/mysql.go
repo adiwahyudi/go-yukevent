@@ -51,6 +51,12 @@ func (rep *MysqlEventRepository) Update(orgID int, evID int, domain *events.Doma
 
 	eventUpdate := fromDomain(*domain)
 
+	find := rep.Conn.Where("id = ?", evID).First(&eventUpdate).Error
+
+	if find != nil {
+		return events.Domain{}, business.ErrNotFound
+	}
+
 	eventUpdate.ID = evID
 
 	result := rep.Conn.Where("organizer_id = ?", orgID).Where("id = ?", evID).Updates(&eventUpdate)
