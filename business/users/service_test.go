@@ -65,8 +65,8 @@ func TestLogin(t *testing.T) {
 		mockUserRepository.On("Login", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(outputDomain, business.ErrEmailorPass).Once()
 
 		resp, err := usersService.Login(inputService.Email, inputService.Password)
-		assert.Equal(t, err, business.ErrEmailorPass)
 		assert.Empty(t, resp)
+		assert.Equal(t, err, business.ErrEmailorPass)
 	})
 
 	t.Run("test case 3 | no email and password test", func(t *testing.T) {
