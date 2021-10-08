@@ -1,7 +1,6 @@
 package events
 
 import (
-	"fmt"
 	"yukevent/business"
 )
 
@@ -31,7 +30,6 @@ func (serv *serviceEvent) Create(orgID int, domain *Domain) (Domain, error) {
 	result, err := serv.eventRepository.Create(orgID, domain)
 
 	if err != nil {
-		fmt.Println("error di service")
 		return Domain{}, err
 	}
 

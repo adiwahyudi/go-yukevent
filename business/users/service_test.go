@@ -3,6 +3,7 @@ package users_test
 import (
 	"testing"
 	"yukevent/app/middleware"
+	"yukevent/business"
 	"yukevent/business/users"
 	_userMock "yukevent/business/users/mocks"
 	"yukevent/helpers/encrypt"
@@ -61,11 +62,11 @@ func TestLogin(t *testing.T) {
 			Password: "adi321",
 		}
 
-		mockUserRepository.On("Login", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(outputDomain, assert.AnError).Once()
+		mockUserRepository.On("Login", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(outputDomain, business.ErrEmailorPass).Once()
 
 		resp, err := usersService.Login(inputService.Email, inputService.Password)
-		assert.NotNil(t, err)
 		assert.Empty(t, resp)
+		assert.Equal(t, err, business.ErrEmailorPass)
 	})
 
 	t.Run("test case 3 | no email and password test", func(t *testing.T) {
@@ -80,16 +81,17 @@ func TestLogin(t *testing.T) {
 			Password: "adi321",
 		}
 
-		mockUserRepository.On("Login", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(outputDomain, assert.AnError).Once()
+		mockUserRepository.On("Login", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(outputDomain, business.ErrEmailorPass).Once()
 
 		resp, err := usersService.Login(inputService.Email, inputService.Password)
-		assert.NotNil(t, err)
+		assert.Equal(t, err, business.ErrEmailorPass)
 		assert.Empty(t, resp)
 	})
 }
 
 func TestRegister(t *testing.T) {
-	t.Run("test case 1, valid test for register", func(t *testing.T) {
+
+	t.Run("test case 1, valid register", func(t *testing.T) {
 		password, _ := encrypt.HashingPassword("123456")
 		outputDomain := users.Domain{
 			Username:     "iwayanadiwahyudi",
@@ -113,6 +115,42 @@ func TestRegister(t *testing.T) {
 
 		resp, err := usersService.Register(&inputService)
 		assert.Nil(t, err)
-		assert.NotEmpty(t, resp)
+		assert.Equal(t, inputService.Username, resp.Username)
+	})
+	t.Run("test case 2, fail registration", func(t *testing.T) {
+		outputDomain := users.Domain{}
+		inputService := users.Domain{
+			Username:     "iwayanadiwahyudi",
+			Email:        "iwayanadiwahyudi@mail.com",
+			Password:     "123456",
+			Name:         "I Wayan Adi Wahyudi",
+			Dob:          "14-01-2001",
+			Phone_Number: "0811111111",
+			Photo:        "ini_poto",
+		}
+		mockUserRepository.On("Register", mock.Anything).Return(outputDomain, business.ErrInternalServer).Once()
+
+		resp, err := usersService.Register(&inputService)
+		assert.Empty(t, resp)
+		assert.Equal(t, err, business.ErrInternalServer)
+	})
+
+	t.Run("test case 3, fail hashed", func(t *testing.T) {
+		password, _ := encrypt.HashingPassword("asbnsadhhkqwe")
+		outputDomain := users.Domain{}
+		inputService := users.Domain{
+			Username:     "iwayanadiwahyudi",
+			Email:        "iwayanadiwahyudi@mail.com",
+			Password:     password,
+			Name:         "I Wayan Adi Wahyudi",
+			Dob:          "14-01-2001",
+			Phone_Number: "0811111111",
+			Photo:        "ini_poto",
+		}
+		mockUserRepository.On("Register", mock.Anything).Return(outputDomain, business.ErrInternalServer).Once()
+
+		resp, err := usersService.Register(&inputService)
+		assert.Empty(t, resp)
+		assert.Equal(t, err, business.ErrInternalServer)
 	})
 }
