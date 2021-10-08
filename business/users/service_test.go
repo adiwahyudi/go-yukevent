@@ -3,6 +3,7 @@ package users_test
 import (
 	"testing"
 	"yukevent/app/middleware"
+	"yukevent/business"
 	"yukevent/business/users"
 	_userMock "yukevent/business/users/mocks"
 	"yukevent/helpers/encrypt"
@@ -61,10 +62,10 @@ func TestLogin(t *testing.T) {
 			Password: "adi321",
 		}
 
-		mockUserRepository.On("Login", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(outputDomain, assert.AnError).Once()
+		mockUserRepository.On("Login", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(outputDomain, business.ErrEmailorPass).Once()
 
 		resp, err := usersService.Login(inputService.Email, inputService.Password)
-		assert.NotNil(t, err)
+		assert.Equal(t, err, business.ErrEmailorPass)
 		assert.Empty(t, resp)
 	})
 
@@ -80,16 +81,17 @@ func TestLogin(t *testing.T) {
 			Password: "adi321",
 		}
 
-		mockUserRepository.On("Login", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(outputDomain, assert.AnError).Once()
+		mockUserRepository.On("Login", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(outputDomain, business.ErrEmailorPass).Once()
 
 		resp, err := usersService.Login(inputService.Email, inputService.Password)
-		assert.NotNil(t, err)
+		assert.Equal(t, err, business.ErrEmailorPass)
 		assert.Empty(t, resp)
 	})
 }
 
 func TestRegister(t *testing.T) {
-	t.Run("test case 1, valid test for register", func(t *testing.T) {
+
+	t.Run("test case 1, valid register", func(t *testing.T) {
 		password, _ := encrypt.HashingPassword("123456")
 		outputDomain := users.Domain{
 			Username:     "iwayanadiwahyudi",
@@ -113,6 +115,6 @@ func TestRegister(t *testing.T) {
 
 		resp, err := usersService.Register(&inputService)
 		assert.Nil(t, err)
-		assert.NotEmpty(t, resp)
+		assert.Equal(t, inputService.Username, resp.Username)
 	})
 }
