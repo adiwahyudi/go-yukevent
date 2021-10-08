@@ -87,3 +87,32 @@ func TestLogin(t *testing.T) {
 		assert.Empty(t, resp)
 	})
 }
+
+func TestRegister(t *testing.T) {
+	t.Run("test case 1, valid test for register", func(t *testing.T) {
+		password, _ := encrypt.HashingPassword("123456")
+		outputDomain := users.Domain{
+			Username:     "iwayanadiwahyudi",
+			Email:        "iwayanadiwahyudi@mail.com",
+			Password:     password,
+			Name:         "I Wayan Adi Wahyudi",
+			Dob:          "14-01-2001",
+			Phone_Number: "0811111111",
+			Photo:        "ini_poto",
+		}
+		inputService := users.Domain{
+			Username:     "iwayanadiwahyudi",
+			Email:        "iwayanadiwahyudi@mail.com",
+			Password:     "123456",
+			Name:         "I Wayan Adi Wahyudi",
+			Dob:          "14-01-2001",
+			Phone_Number: "0811111111",
+			Photo:        "ini_poto",
+		}
+		mockUserRepository.On("Register", mock.Anything).Return(outputDomain, nil).Once()
+
+		resp, err := usersService.Register(&inputService)
+		assert.Nil(t, err)
+		assert.NotEmpty(t, resp)
+	})
+}

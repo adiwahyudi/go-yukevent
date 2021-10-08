@@ -8,7 +8,6 @@ type Domain struct {
 	Email        string
 	Password     string
 	Name         string
-	Dob          string
 	Phone_Number string
 	Photo        string
 	Token        string
