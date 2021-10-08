@@ -9,7 +9,6 @@ type Organizer struct {
 	Password     string `json:"password"`
 	Email        string `json:"email"`
 	Name         string `json:"name"`
-	Dob          string `json:"dob"`
 	Phone_Number string `json:"phone_number"`
 	Photo        string `json:"photo"`
 }
@@ -20,7 +19,6 @@ func (req *Organizer) ToDomain() *organizers.Domain {
 		Password:     req.Password,
 		Email:        req.Email,
 		Name:         req.Name,
-		Dob:          req.Dob,
 		Phone_Number: req.Phone_Number,
 		Photo:        req.Photo,
 	}
